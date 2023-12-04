@@ -1,12 +1,15 @@
 <template>
     <form @submit.prevent="onSubmit">
-        <label for="new-todo-input">What are you doning?</label>
+        <h2 class="label-wrapper">
+            <label for="new-todo-input">What are you doning?</label>
+        </h2>
         <input type="text"
             id="new-todo-input"
             name="new-todo"
             autocomplete="off"
-            v-model.lazy.trim="label"  />
-        <button type="submit">More</button>
+            v-model.lazy.trim="label"
+            class="input-lg"  />
+        <button type="submit" class="btn btn__primary btn__lg">Add</button>
     </form>
 </template>
 
@@ -14,7 +17,6 @@
     export default {
         methods: {
             onSubmit() {
-                console.log("onSubmit method called");
                 if(this.label === "") {
                     return;
                 };
