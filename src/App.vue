@@ -7,8 +7,9 @@
       <li v-for="item in ToDoItems" :key="item.id">
         <to-do-item  
           :label="item.label" 
-          :done="true" 
-          :id="item.id "></to-do-item>
+          :done="item.done" 
+          :id="item.id "
+          @checkbox-changed="$event => updateDoneStatus(item.id)"></to-do-item>
       </li>
      </ul>
   </div>
@@ -51,6 +52,11 @@ export default {
       this.ToDoItems.push({ id: uniqueId('todo-'), label: toDoLabel, done: false });
     },
   },
+  
+    updateDoneStatus(toDoId) {
+      const toDoUpdate = this.ToDoItems.find((item)=> item.id === toDoId);
+      toDoUpdate.done = !toDoUpdate.done;
+  }
 };
 </script>
 

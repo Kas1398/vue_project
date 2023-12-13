@@ -4,7 +4,8 @@
             type="checkbox" 
             :id="id" 
             v-bind:checked="isDone" 
-            class="checkbox" />
+            class="checkbox"
+            @change="onCheckboxChanged" />
         <label :for="id" class="checkbox-label">{{label}} </label>
     </div>
 </template>
@@ -29,6 +30,14 @@
                 return `${numberFinishedItems} out of ${this.ToDoItems.length} items completed`;
             },
         },
+        methods: {
+        updateDoneStatus() {
+            this.$emit('update-done-status', { id: this.id, done: this.isDone });
+        },
+        onCheckboxChanged() {
+            this.updateDoneStatus();
+        },
+    },
     };
 </script>
 <style scoped>
