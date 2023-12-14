@@ -8,6 +8,20 @@
             @change="onCheckboxChanged" />
         <label :for="id" class="checkbox-label">{{label}} </label>
     </div>
+    <div class="btn-group">
+        <button 
+          type="button"
+          class="btn"
+          ref="editButton"
+          @click="toggleToItemEditForm">
+            Edit
+            <span class="visually-hidden">{{ label }}</span>
+        </button>
+        <button type="button" class="btn btn_danger" @click="deleteToDo">
+            Delete
+            <span class="visually-hidden">{{ label }}</span>
+        </button>
+    </div>
 </template>
 <script>
 
@@ -20,7 +34,16 @@
         data() {
             return {
                 isDone: this.done,
+                isEditing: false,
             };
+        },
+        methods: {
+            deleteToDo() {
+                this.$emit("item-deleted");
+            },
+            toggleToItemEditForm() {
+                this.isEditing = true;
+            },
         },
         computed: {
             listSummary(){
