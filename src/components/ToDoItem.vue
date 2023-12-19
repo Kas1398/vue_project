@@ -31,6 +31,8 @@
             done: {default: false, type: Boolean},
             id: { required: true, type: String },
         },
+        emits: ['checkboxChanged', 'item-deleted', 'item-edited'],
+
         data() {
             return {
                 isDone: this.done,
@@ -39,12 +41,26 @@
         },
         methods: {
             deleteToDo() {
-                this.$emit("item-deleted");
+                this.$emit("item-deleted", this.id);
             },
             toggleToItemEditForm() {
                 this.isEditing = true;
+              },
+           },
+            updateDoneStatus() {
+            this.$emit('update-done-status', { id: this.id, done: this.isDone });
+           },
+            onCheckboxChanged() {
+                this.updateDoneStatus();
+           },
+            itemEdited(newLabel) {
+                this.$emit("item-edited", newLabel);
+                this.isEditing = false;
             },
-        },
+            editCancelled() {
+                this.isEditing = false;
+            },
+    
         computed: {
             listSummary(){
                 const numberFinishedItems = this.ToDoItems.filter(
@@ -53,14 +69,7 @@
                 return `${numberFinishedItems} out of ${this.ToDoItems.length} items completed`;
             },
         },
-        methods: {
-        updateDoneStatus() {
-            this.$emit('update-done-status', { id: this.id, done: this.isDone });
-        },
-        onCheckboxChanged() {
-            this.updateDoneStatus();
-        },
-    },
+        
     };
 </script>
 <style scoped>

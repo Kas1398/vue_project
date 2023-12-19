@@ -8,14 +8,18 @@
         <to-do-item  
           :label="item.label" 
           :done="item.done" 
-          :id="item.id "
-          @checkbox-changed="$event => updateDoneStatus(item.id)"></to-do-item>
+          :id="item.id"
+          @checkbox-changed="updateDoneStatus(item.id)"
+          @item-deleted="deleteToDo"
+          @item-edited="editToDo(item.id, $event)">
+        </to-do-item>
       </li>
      </ul>
   </div>
 </template>
 
 <script>
+import ToDoItemEditForm from "./components/ToDoItemEditForm.vue";
 import ToDoItem from "./components/ToDoItem.vue";
 import uniqueId from "lodash.uniqueid";
 import ToDoForm from "./components/ToDoForm.vue";
@@ -25,6 +29,7 @@ export default {
   components:{
     ToDoItem,
     ToDoForm,
+    ToDoItemEditForm,
   },
   data() {
     return {
@@ -47,16 +52,23 @@ export default {
   },
   methods: {
     addToDo(toDoLabel){
-      /*console.log("onSubmit method called");
-      console.log("to-do lisätty", toDoLabel);*/
-      this.ToDoItems.push({ id: uniqueId('todo-'), label: toDoLabel, done: false });
+        this.ToDoItems.push({ id: uniqueId('todo-'), label: toDoLabel, done: false });
     },
   },
   
     updateDoneStatus(toDoId) {
       const toDoUpdate = this.ToDoItems.find((item)=> item.id === toDoId);
       toDoUpdate.done = !toDoUpdate.done;
-  }
+  },
+    deleteToDo(toDoId) {
+      const itemIndex = this.ToDoItems.findIndex((item) => item.id === toDoId);
+      this.ToDoItems.splice(itemIndex, 1);
+      this.$refs.listSummary.focus();
+  },
+    editToDo(toDoId, newLabel) {
+      const toDoEdit = this.ToDoItems.find((item) => item.id === toDoId);
+      toDoEdit.label = newLabel;
+  },
 };
 </script>
 
@@ -105,7 +117,7 @@ ul {
   }
   #app > * {
     max-width: 50rem;
-    margin-left: car;
+    margin-left: auto;
     margin-right: auto;
   }
   #app > form {

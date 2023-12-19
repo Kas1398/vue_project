@@ -1,13 +1,23 @@
 <template>  
     <form class="stack-small" @submit.prevent="onSubmit">
-        <div>
+        <div class="custom-checkbox" v-if="!isEditing">
           <label class="edit-label">Edit Name for "{{label}}"</label>
           <input
             :id="id"
-            type="text"
-            autocomplete="off"
-            v-model.lazy.trim="newLabel" />
+            type="checkbox"
+            class="checkbox"
+            v-bind:checked="isDone"
+            @change="() => $emit('checkbox-changed')" 
+          />
+          <label :for="id" class="checkbox-label">{{ label }}</label>
         </div>
+        <to-do-item-edit-form
+            v-else
+            :id="id"
+            :label="label"
+            @item-edited="itemEdited"
+            @edit-cancelled="editCancelled">
+        </to-do-item-edit-form>
         <div class="btn-group">
           <button type="button" class="btn" @click="onCancel">
             Cancel
